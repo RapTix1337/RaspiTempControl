@@ -7,15 +7,15 @@ import RPi.GPIO as GPIO
 # getting environment variables
 load_dotenv()
 sensor = '/sys/bus/w1/devices/' + os.getenv('SENSOR_FOLDER') + '/w1_slave'
-gpio_pin = float(os.getenv('GPIO_PIN'))
+# gpio_pin = float(os.getenv('GPIO_PIN'))
 temperature_start_fan = float(os.getenv('TEMPERATURE_START_FAN'))
 temperature_stop_fan = float(os.getenv('TEMPERATURE_STOP_FAN'))
 temperature_measurement_interval = float(os.getenv('TEMPERATURE_MEASUREMENT_INTERVAL'))
 
 # GPIO setup
-GPIO.setwarnings(False)
-GPIO.setmode(GPIO.BCM)
-GPIO.setup(gpio_pin, GPIO.OUT)
+# GPIO.setwarnings(False)
+# GPIO.setmode(GPIO.BCM)
+# GPIO.setup(gpio_pin, GPIO.OUT)
 
 
 def read_temperature_sensor(sensor_name):
@@ -47,11 +47,11 @@ try:
         # temperature is too high, start fan
         if current_temperature >= temperature_start_fan:
             print("starting fan")
-            GPIO.output(gpio_pin, True)
+            # GPIO.output(gpio_pin, True)
         # temperature is low enough, stop fan
         elif current_temperature <= temperature_stop_fan:
             print("stopping fan")
-            GPIO.output(gpio_pin, False)
+            # GPIO.output(gpio_pin, False)
         time.sleep(temperature_measurement_interval)
 
 except KeyboardInterrupt:
