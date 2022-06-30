@@ -9,7 +9,7 @@ from pprint import pprint
 
 # getting environment variables
 load_dotenv()
-gpio_pin = float(os.getenv('GPIO_PIN'))
+gpio_pin = int(os.getenv('GPIO_PIN'))
 temperature_start_fan = float(os.getenv('TEMPERATURE_START_FAN'))
 temperature_stop_fan = float(os.getenv('TEMPERATURE_STOP_FAN'))
 api_key = os.getenv('API_KEY')
