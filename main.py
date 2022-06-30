@@ -2,7 +2,7 @@ import sys
 import time
 import os
 from dotenv import load_dotenv
-#import RPi.GPIO as GPIO
+import RPi.GPIO as GPIO
 import requests
 import json
 from pprint import pprint
@@ -20,9 +20,9 @@ fan_is_on = False
 amount_seconds_fan_on = 0
 
 # GPIO setup
-#GPIO.setwarnings(False)
-#GPIO.setmode(GPIO.BCM)
-#GPIO.setup(gpio_pin, GPIO.OUT)
+GPIO.setwarnings(False)
+GPIO.setmode(GPIO.BCM)
+GPIO.setup(gpio_pin, GPIO.OUT)
 
 
 def get_temperature_in_celsius():
@@ -42,13 +42,13 @@ try:
             if not fan_is_on:
                 print("starting fan")
                 fan_is_on = True
-                #GPIO.output(gpio_pin, True)
+                GPIO.output(gpio_pin, True)
         # temperature is low enough, stop fan
         elif current_temperature <= temperature_stop_fan:
             if fan_is_on:
                 print("stopping fan")
                 fan_is_on = False
-                #GPIO.output(gpio_pin, False)
+                GPIO.output(gpio_pin, False)
 
         if fan_is_on:
             amount_seconds_fan_on += request_delay
