@@ -9,7 +9,7 @@ from pprint import pprint
 
 # getting environment variables
 load_dotenv()
-gpio_pin = float(os.getenv('GPIO_PIN'))
+gpio_pin = int(os.getenv('GPIO_PIN'))
 temperature_target = float(os.getenv('TEMPERATURE_TARGET'))
 api_key = os.getenv('API_KEY')
 api_url = os.getenv('API_URL') + '?x-aio-key=' + api_key
