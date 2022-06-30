@@ -60,6 +60,7 @@ try:
 
 except KeyboardInterrupt:
     print('Closing')
+    fan_clockwise.stop()
 except Exception as e:
     print(str(e))
     sys.exit(1)
