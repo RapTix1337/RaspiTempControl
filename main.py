@@ -5,7 +5,6 @@ from dotenv import load_dotenv
 import RPi.GPIO as GPIO
 import requests
 import json
-from pprint import pprint
 
 # getting environment variables
 load_dotenv()
@@ -57,6 +56,7 @@ try:
 
 except KeyboardInterrupt:
     print('Closing')
+    GPIO.cleanup()
 except Exception as e:
     print(str(e))
     sys.exit(1)
