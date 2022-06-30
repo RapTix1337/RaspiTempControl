@@ -10,19 +10,23 @@ from pprint import pprint
 # getting environment variables
 load_dotenv()
 gpio_pin = float(os.getenv('GPIO_PIN'))
-temperature_start_fan = float(os.getenv('TEMPERATURE_START_FAN'))
-temperature_stop_fan = float(os.getenv('TEMPERATURE_STOP_FAN'))
+temperature_target = float(os.getenv('TEMPERATURE_TARGET'))
 api_key = os.getenv('API_KEY')
 api_url = os.getenv('API_URL') + '?x-aio-key=' + api_key
 request_delay = float(os.getenv('REQUEST_DELAY'))
 fan_power = float(os.getenv('FAN_POWER'))
+fan_current_power = 0
 fan_is_on = False
 amount_seconds_fan_on = 0
+temperature_dif_percentage = 0
+power_consumption = 0
 
 # GPIO setup
 GPIO.setwarnings(False)
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(gpio_pin, GPIO.OUT)
+fan_clockwise = GPIO.PWM(gpio_pin, 50)
+fan_clockwise.start(0)
 
 
 def get_temperature_in_celsius():
@@ -33,22 +37,21 @@ def get_temperature_in_celsius():
 
 try:
     while True:
-        power_consumption = fan_power * amount_seconds_fan_on
         print("Current Power Consumption = " + str(power_consumption) + " Ws")
         current_temperature = get_temperature_in_celsius()
         print("Current temperature: " + str(current_temperature))
         # temperature is too high, start fan
-        if current_temperature >= temperature_start_fan:
-            if not fan_is_on:
-                print("starting fan")
-                fan_is_on = True
-                GPIO.output(gpio_pin, True)
+        if current_temperature > temperature_target:
+            temperature_dif_percentage = int(round((current_temperature - temperature_target) / temperature_target * 100))
+            if temperature_dif_percentage > 100:
+                temperature_dif_percentage = 100
+            power_consumption = fan_current_power * (temperature_dif_percentage / 100) * amount_seconds_fan_on
+            # set power to temp dif percentage
+            fan_clockwise.start(temperature_dif_percentage)
         # temperature is low enough, stop fan
-        elif current_temperature <= temperature_stop_fan:
-            if fan_is_on:
-                print("stopping fan")
-                fan_is_on = False
-                GPIO.output(gpio_pin, False)
+        else:
+            print("stopping fan")
+            fan_clockwise.stop()
 
         if fan_is_on:
             amount_seconds_fan_on += request_delay
