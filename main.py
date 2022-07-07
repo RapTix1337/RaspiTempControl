@@ -15,7 +15,6 @@ api_url = os.getenv('API_URL') + '?x-aio-key=' + api_key
 request_delay = float(os.getenv('REQUEST_DELAY'))
 fan_power = float(os.getenv('FAN_POWER'))
 fan_current_power = 0
-fan_is_on = False
 amount_seconds_fan_on = 0
 temperature_dif_percentage = 0
 power_consumption = 0
@@ -51,9 +50,6 @@ try:
         else:
             print("stopping fan")
             fan_clockwise.stop()
-
-        if fan_is_on:
-            amount_seconds_fan_on += request_delay
 
         time.sleep(request_delay)
 
